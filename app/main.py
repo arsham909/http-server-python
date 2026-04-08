@@ -10,8 +10,9 @@ def main():
         conncetion, address = server.accept()
         recv = conncetion.recv(1024)
         
-        data = recv.decode("utf-8").split(' ')
-        if data[1] == "/":
+        request = recv.decode().split('\r\n')
+        path = request[0].split(' ')
+        if path[1] == "/":
             conncetion.sendall(b"HTTP/1.1 200 OK\r\n\r\n")
         else:
             conncetion.sendall(b"HTTP/1.1 404 Not Found\r\n\r\n")
