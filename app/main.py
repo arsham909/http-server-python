@@ -11,8 +11,6 @@ def main():
     # server_socket.accept() # wait for client
     with socket.create_server(("localhost",4221), reuse_port=True) as server:
         conncetion, address = server.accept()
-        # print(f"conncetion is working {conncetion}")
-        
         conncetion.sendall(b"HTTP/1.1 200 OK\r\n\r\n")
         
         
