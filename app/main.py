@@ -17,13 +17,11 @@ def main():
             user_agent = request[2]
             if path == "/":
                 conncetion.sendall(b"HTTP/1.1 200 OK\r\n\r\n")
-                print(request)
                 break
             elif paths[1] == "echo":
                 echo = paths[2]
                 data = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(echo)}\r\n\r\n{echo}"
                 conncetion.sendall(data.encode())
-                print(request)
             elif paths[1] == "user-agent":
                 data = user_agent.split("User-Agent: ")
                 data = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(data[1])}\r\n\r\n{data[1]}"
