@@ -25,7 +25,7 @@ def main():
                 conncetion.sendall(data.encode())
                 print(request)
             elif paths[1] == "user-agent":
-                data = user_agent.split("User-Agent:")
+                data = user_agent.split("User-Agent: ")
                 data = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(data[1])}\r\n\r\n{data[1]}"
                 conncetion.sendall(data.encode())
             else:
