@@ -80,6 +80,7 @@ class server_side():
         elif paths[1] == "user-agent":
             self.data["Content-Length"] = len(user_agent)
             self.data["Content"] = user_agent
+            self.data["Content-Type"] = "text/plain"
             return 
         
         elif path == "/":
@@ -113,7 +114,6 @@ class server_side():
                 file.write(body)
                 self.data["Content-Type"] = "text/plain"
                 self.data["Status_Line"] = "HTTP/1.1 201 Created"
-                
             return
         except Exception as e:
             print(e)
