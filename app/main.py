@@ -59,6 +59,7 @@ class server_side():
         # parsing safety
         if not request: return b"HTTP/1.1 400 Bad Request\r\n\r\n"
         method = request[0].split(" ")[0]
+        print(request)
         if method == "GET":
             self.get_method_requests(request)
         elif method == "POST":
@@ -110,12 +111,7 @@ class server_side():
         path = request[0].split(' ')[1]
         paths = path.split("/")
         filename= paths[-1]
-        body = request[7]
-        
-        # print(request[7])
-        # print(request)
-        # print(sys.argv[2])
-        
+        body = request[7]   
         if paths[1] == "files" and Path(f"/{sys.argv[2]}").exists():
             with open(filename, "w") as file:
                 file.write(body)
