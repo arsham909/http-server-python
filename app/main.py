@@ -4,13 +4,6 @@ from threading import Thread
 import sys
 from pathlib import Path
 
-data= {
-    "Status_Line" : "HTTP/1.1 200 OK",
-    "Content-Type" : None,
-    "Content-Length" : None,
-    "Content" : None,
-    "body" : None,
-}
 
 class server_side():
     def __init__(self, host, port):
@@ -118,7 +111,9 @@ class server_side():
         try:
             with open(full_path, "w") as file:
                 file.write(body)
+                self.data["Content-Type"] = "text/plain"
                 self.data["Status_Line"] = "HTTP/1.1 201 Created"
+                
             return
         except Exception as e:
             print(e)
