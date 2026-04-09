@@ -1,17 +1,14 @@
 import socket  
 from threading import Thread
-import sys, pathlib
+import sys
+from pathlib import Path
 
 
 class server_side():
-    def __init__(self, host, port, dir=None):
+    def __init__(self, host, port):
         self.host = host
         self.port = port
         self.running = True
-        self.dir = dir
-        if dir:
-            self.dir = dir.split("/")[1]
-            pathlib.Path(self.dir).mkdir(exist_ok=True, parents=True)
         self.start_server()
     
     def start_server(self):
@@ -60,18 +57,11 @@ class server_side():
         elif paths[1] == "quit":
             self.running =  False
             return b"HTTP/1.1 200 OK\r\n\r\n"
-        elif paths[1] == "files":
-            file_path = pathlib.Path(f"/{self.dir}/{paths[2]}")
-            try: 
-                if file_path.exists():
-                    with open(f"/{self.dir}/{echo}", 'r') as file:
-                        content = file.read()
-                        data = f"HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: {len(content)}\r\n\r\n{content}"
-                        return data.encode()
-                else:
-                    return b"HTTP/1.1 404 Not Found\r\n\r\n"
-            except Exception as e:
-                print(e)
+        elif paths[1] == "files" and Path(f"/{sys.argv[2]}/{paths[2]}").exists():
+            with open(f"/{sys.argv[2]}/{paths[2]}", 'r') as file:
+                content = file.read()
+                data = f"HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: {len(content)}\r\n\r\n{content}"
+                return data.encode()
         else: 
             return b"HTTP/1.1 404 Not Found\r\n\r\n"
             
@@ -79,10 +69,7 @@ class server_side():
                
 
 def main():
-    if sys.argv[1] == "--directory" or sys.argv[1] == "-d":
-        server_side("localhost", 4221, sys.argv[2])
-    else:
-        server_side("localhost", 4221)
+    server_side("localhost", 4221)
      
 
 if __name__ == "__main__":
