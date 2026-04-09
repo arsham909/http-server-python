@@ -111,6 +111,7 @@ class server_side():
         path = request[0].split(' ')[1]
         paths = path.split("/")
         filename= paths[-1]
+        print(filename)
         body = request[-1]   
         if paths[1] == "files" and Path(f"/{sys.argv[2]}").exists():
             with open(filename, "w") as file:
