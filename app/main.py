@@ -1,3 +1,4 @@
+import os
 import socket  
 from threading import Thread
 import sys
@@ -54,10 +55,8 @@ class server_side():
              
         
     def user_request(self, recv):
-        request = recv.decode().split('\r\n')
         header, body = recv.decode().split("\r\n\r\n", 1)
         header = header.split("\r\n")
-        print(header, body)
         # parsing safety
         if not header: return b"HTTP/1.1 400 Bad Request\r\n\r\n"
         method = header[0].split(" ")[0]
@@ -112,16 +111,17 @@ class server_side():
     def post_method_requests(self, header, body):
         
         path = header[0].split(' ')[1]
-        paths = path.split("/")
-        filename= paths[-1]
-        print(header, paths, filename)
-        # print("header:" + header + "paths:" +  paths + "filename:" + filename)
-        # print(filename)   
-        if paths[1] == "files" and Path(f"/{sys.argv[2]}").exists():
-            with open(filename, "w") as file:
+        filename = path.split("/")[-1]
+        base_dir = sys.argv[2] if len(sys.argv) > 2 else "."
+        full_path = os.path.join(base_dir, filename)
+        
+        try:
+            with open(full_path, "w") as file:
                 file.write(body)
                 self.data["Status_Line"] = "HTTP/1.1 201 Created"
             return
+        except Exception as e:
+            print(e)
             
         
         
