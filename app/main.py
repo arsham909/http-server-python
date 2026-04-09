@@ -61,11 +61,17 @@ class server_side():
             self.running =  False
             return b"HTTP/1.1 200 OK\r\n\r\n"
         elif paths[1] == "files":
-            echo = paths[2]
-            with open(f"/{self.dir}/{echo}", 'r') as file:
-                content = file.read()
-                data = f"HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: {len(content)}\r\n\r\n{content}"
-                return data.encode()
+            file_path = pathlib.Path(f"/{self.dir}/{paths[2]}")
+            try: 
+                if file_path.exists():
+                    with open(f"/{self.dir}/{echo}", 'r') as file:
+                        content = file.read()
+                        data = f"HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: {len(content)}\r\n\r\n{content}"
+                        return data.encode()
+                else:
+                    return b"HTTP/1.1 404 Not Found\r\n\r\n"
+            except Exception as e:
+                print(e)
         else: 
             return b"HTTP/1.1 404 Not Found\r\n\r\n"
             
