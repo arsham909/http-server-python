@@ -56,24 +56,25 @@ class server_side():
     def user_request(self, recv):
         request = recv.decode().split('\r\n')
         header, body = recv.decode().split("\r\n\r\n", 1)
+        header.split("\r\n")
         print(header, body)
         # parsing safety
-        if not request: return b"HTTP/1.1 400 Bad Request\r\n\r\n"
-        method = request[0].split(" ")[0]
+        if not header: return b"HTTP/1.1 400 Bad Request\r\n\r\n"
+        method = header[0].split(" ")[0]
         if method == "GET":
-            self.get_method_requests(request)
+            self.get_method_requests(header, body)
         elif method == "POST":
-            self.post_method_requests(request)
+            self.post_method_requests(header, body)
         else:
             self.data["Status_Line"] = "HTTP/1.1 404 Not Found"
             return self.data
      
         
-    def get_method_requests(self, request):
-        path = request[0].split(' ')[1]
+    def get_method_requests(self, header, body):
+        path = header[0].split(' ')[1]
         paths = path.split("/")
         
-        for line in request:
+        for line in header:
             if line.startswith("User-Agent: "):
                 user_agent = line.split("User-Agent: ")[1]
         
@@ -107,13 +108,13 @@ class server_side():
             self.data["Status_Line"] = "HTTP/1.1 404 Not Found"
             return 
         
-    def post_method_requests(self, request):
+    def post_method_requests(self, header, body):
         
-        path = request[0].split(' ')[1]
+        path = header[0].split(' ')[1]
         paths = path.split("/")
         filename= paths[-1]
-        print(filename)
-        body = request[-1]   
+        print(header,paths, filename)
+        print(filename)   
         if paths[1] == "files" and Path(f"/{sys.argv[2]}").exists():
             with open(filename, "w") as file:
                 file.write(body)
