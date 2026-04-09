@@ -55,7 +55,7 @@ class server_side():
         
     def user_request(self, recv):
         request = recv.decode().split('\r\n')
-        # print(request)
+        print(request)
         # parsing safety
         if not request: return b"HTTP/1.1 400 Bad Request\r\n\r\n"
         method = request[0].split(" ")[0]
@@ -71,7 +71,7 @@ class server_side():
     def get_method_requests(self, request):
         path = request[0].split(' ')[1]
         paths = path.split("/")
-        print(request)
+        
         for line in request:
             if line.startswith("User-Agent: "):
                 user_agent = line.split("User-Agent: ")[1]
