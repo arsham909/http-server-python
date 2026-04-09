@@ -54,12 +54,12 @@ class server_side():
              
         
     def user_request(self, recv):
+        print(recv)
         request = recv.decode().split('\r\n')
         # print(request)
         # parsing safety
         if not request: return b"HTTP/1.1 400 Bad Request\r\n\r\n"
         method = request[0].split(" ")[0]
-        print(request)
         if method == "GET":
             self.get_method_requests(request)
         elif method == "POST":
@@ -108,24 +108,17 @@ class server_side():
             return 
         
     def post_method_requests(self, request):
+        
         path = request[0].split(' ')[1]
         paths = path.split("/")
         filename= paths[-1]
-        body = request[7]   
+        body = request[-1]   
         if paths[1] == "files" and Path(f"/{sys.argv[2]}").exists():
             with open(filename, "w") as file:
                 file.write(body)
                 self.data["Status_Line"] = "HTTP/1.1 201 Created"
             return
             
-        #     with open(f"/{sys.argv[2]}/{paths[2]}", 'r') as file:
-        #         content = file.read()
-        #         self.data["Status_Line"] = "HTTP/1.1 201 Created"
-        #         self.data["Content-Length"] = len(content)
-        #         self.data["Content"] = content
-        #         self.data["Content-Type"] = "application/octet-stream"
-        #         return
-    
         
         
         
