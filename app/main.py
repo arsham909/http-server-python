@@ -75,6 +75,7 @@ class server_side():
             echo = paths[2]
             self.data["Content-Length"] = len(echo)
             self.data["Content"] = echo
+            self.data["Content-Type"] = "text/plain"
             return 
         
         elif paths[1] == "user-agent":
