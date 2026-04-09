@@ -55,7 +55,7 @@ class server_side():
         
     def user_request(self, recv):
         request = recv.decode().split('\r\n')
-        test = recv.decode().split("\r\n\r\n")
+        test = recv.decode().split("\r\n\r\n", 1)
         print(test)
         # parsing safety
         if not request: return b"HTTP/1.1 400 Bad Request\r\n\r\n"
