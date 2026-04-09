@@ -54,7 +54,7 @@ class server_side():
              
         
     def user_request(self, recv):
-        print(recv)
+        print(recv.decode())
         request = recv.decode().split('\r\n')
         # print(request)
         # parsing safety
