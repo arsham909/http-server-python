@@ -104,12 +104,10 @@ class server_side():
             return 
         
     def post_method_requests(self, header, body):
-        
         path = header[0].split(' ')[1]
         filename = path.split("/")[-1]
         base_dir = sys.argv[2] if len(sys.argv) > 2 else "."
         full_path = os.path.join(base_dir, filename)
-        
         try:
             with open(full_path, "w") as file:
                 file.write(body)
