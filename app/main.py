@@ -24,17 +24,17 @@ class server_side():
                 thread.start()     
     
     def handle_client(self, connection):
-        while True:
-            with connection :
-                try:
+        with connection :
+            try:
+                while True:
                     raw_request = connection.recv(1024)
                     if not raw_request:
                         return
                     respond_bytes = self.process_request(raw_request.decode())
                     connection.sendall(respond_bytes)
-                    
-                except Exception as e:
-                    print(e)
+                
+            except Exception as e:
+                print(e)
     
     def process_request(self, raw_request):
         try:
