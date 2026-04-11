@@ -65,7 +65,6 @@ class server_side():
     
     def content_encoding(self, header_lines, headers,):
         for line in header_lines:
-            print(line)
             if "Accept-Encoding: " in line:
                 encoding = line.replace("Accept-Encoding: ", "").split(", ")
                 if "gzip" in encoding:
@@ -83,7 +82,7 @@ class server_side():
         elif len(paths) > 1 and paths[1] == "echo":
             echo_str = paths[2] if len(paths) > 2 else ""
             headers["Content-Type"] = "text/plain"
-            if headers["Content-Encoding"] == "gzip":
+            if headers.get("Content-Encoding", None) == "gzip":
                 body = gzip.compress(echo_str.encode())
             else:
                 body = echo_str.encode() # Convert string to bytes
