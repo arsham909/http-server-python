@@ -65,6 +65,7 @@ class server_side():
     
     def content_encoding(self, header_lines, headers,):
         for line in header_lines:
+            print(line)
             if "Accept-Encoding: " in line:
                 encoding = line.split(" ")
                 print(encoding)
