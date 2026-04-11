@@ -83,7 +83,10 @@ class server_side():
         elif len(paths) > 1 and paths[1] == "echo":
             echo_str = paths[2] if len(paths) > 2 else ""
             headers["Content-Type"] = "text/plain"
-            body = echo_str.encode() # Convert string to bytes
+            if headers["Content-Encoding"] == "gzip":
+                body = gzip.compress(echo_str.encode())
+            else:
+                body = echo_str.encode() # Convert string to bytes
             
         elif len(paths) > 1 and paths[1] == "user-agent":
             user_agent = ""
