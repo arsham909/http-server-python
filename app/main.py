@@ -66,7 +66,9 @@ class server_side():
     def content_encoding(self, header_lines, headers,):
         for line in header_lines:
             if "Accept-Encoding: " in line:
-                if "gzip" in line.split(" "):
+                encoding = line.split(" ")
+                print(encoding)
+                if "gzip" in encoding:
                     headers["Content-Encoding"] = "gzip"
         return headers
 
