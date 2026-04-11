@@ -113,22 +113,23 @@ class server_side():
         return headers, body
     
         
-    def post_method_requests(self,path, body_section, headers, body):
+    def post_method_requests(self, path, body_section, headers, body):
         paths = path.split("/")
         if len(paths) > 2 and paths[1] == "files":
-            filename = path[-1]
+            filename = paths[-1]
             full_path = os.path.join(self.base_dir, filename)
+            
             try:
+                # Write as text for now, assuming the test is sending text
                 with open(full_path, "w") as file:
                     file.write(body_section)
-                headers["Content-Type"] = "text/plain"
                 headers["Status_Line"] = "HTTP/1.1 201 Created"
             except Exception as e:
-                print(e)
+                print(f"File write error: {e}")
                 headers["Status_Line"] = "HTTP/1.1 500 Internal Server Error"
         else:
             headers["Status_Line"] = "HTTP/1.1 404 Not Found"
-        
+            
         return headers, body
             
                 
