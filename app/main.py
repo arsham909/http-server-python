@@ -34,6 +34,7 @@ class server_side():
                     respond_bytes = self.process_request(raw_request.decode())
                     connection.sendall(respond_bytes)
                     if not self.connection_open:
+                        print('connection closed')
                         connection.close()
                         
                     
@@ -77,6 +78,7 @@ class server_side():
                     headers["Content-Encoding"] = "gzip"
             elif "Connection: close" in line:
                 headers["Connection"] = "close"
+                self.connection_open = False
                 
         return headers
 
@@ -87,8 +89,6 @@ class server_side():
         paths = path.split("/")
 
         if path == "/":
-            if headers.get("Connection", None) == "close":
-                self.connection_open = False
             pass # Keep 200 OK default
             
         elif len(paths) > 1 and paths[1] == "echo":
