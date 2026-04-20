@@ -84,7 +84,7 @@ class server_side():
         paths = path.split("/")
 
         if path == "/":
-            if headers["Connection"] == "close":
+            if headers.get("Connection", None) == "close":
                 self.connection_open = False
             pass # Keep 200 OK default
             
