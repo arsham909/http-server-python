@@ -12,6 +12,7 @@ class server_side():
         self.port = port
         self.running = True
         self.base_dir = sys.argv[2] if len(sys.argv) > 2 else "."
+        self.connection_open = True
         self.start_server()
     
     def start_server(self):
@@ -26,7 +27,7 @@ class server_side():
     def handle_client(self, connection):
         with connection :
             try:
-                while True:
+                while self.connection_open:
                     raw_request = connection.recv(1024)
                     if not raw_request:
                         return
@@ -69,14 +70,20 @@ class server_side():
                 encoding = line.replace("Accept-Encoding: ", "").split(", ")
                 if "gzip" in encoding:
                     headers["Content-Encoding"] = "gzip"
+            elif "Connection: close" in line:
+                headers["Connection"] = "close"
+                
         return headers
 
-     
+    
         
+            
     def get_method_requests(self, path, header_lines, headers, body):
         paths = path.split("/")
 
         if path == "/":
+            if headers["Connection"] == "close":
+                self.connection_open = False
             pass # Keep 200 OK default
             
         elif len(paths) > 1 and paths[1] == "echo":
@@ -100,7 +107,7 @@ class server_side():
             
         elif len(paths) > 2 and paths[1] == "files":
             filename = paths[2]
-            # Safely join the paths
+            
             full_path = os.path.join(self.base_dir, filename)
             
             if os.path.exists(full_path):
