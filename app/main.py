@@ -33,9 +33,9 @@ class server_side():
                         return
                     respond_bytes = self.process_request(raw_request.decode())
                     connection.sendall(respond_bytes)
-                    if self.connection_open == False:
+                    if not self.connection_open:
                         connection.close()
-                        break
+                        
                     
                         
                 
