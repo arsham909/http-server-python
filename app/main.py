@@ -33,8 +33,6 @@ class server_side():
                         return
                     respond_bytes = self.process_request(raw_request.decode())
                     connection.sendall(respond_bytes)
-                    # if not self.connection_open:
-                    #     connection.close()
                 
             except Exception as e:
                 print(e)
