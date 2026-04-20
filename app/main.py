@@ -35,6 +35,7 @@ class server_side():
                     connection.sendall(respond_bytes)
                     if not self.connection_open:
                         self.connection_open.close()
+                        break
                     
                         
                 
